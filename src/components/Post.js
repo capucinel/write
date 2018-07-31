@@ -3,7 +3,7 @@ import './Post.css'
 import { Button, Modal, Header, Icon } from 'semantic-ui-react'
 import { navigate, Link } from '@reach/router'
 
-const Post = ({ date, theme, titre, image, contentPreview, readMore, id, content, idContent, deleteBtn, deleteWriting }) => {
+const Post = ({ date, theme, titre, image, contentPreview, fontiontest, readMore, id, content, idContent, deleteBtn, deleteWriting }) => {
   let fullContent = ''
     if (id === idContent) {
         fullContent = content
@@ -14,6 +14,7 @@ const Post = ({ date, theme, titre, image, contentPreview, readMore, id, content
     }
    return (
 <div className="Post">
+{fontiontest}
     <div className='PostHeader'>
     {date}
     </div>
@@ -24,8 +25,8 @@ const Post = ({ date, theme, titre, image, contentPreview, readMore, id, content
     {titre}
     </div>
     <div className='PostHeader'>
-    {image}
-    </div>
+    <img src={image} />
+        </div>
     <div className='PostHeader'>
       {contentPreview}
       {fullContent}
@@ -46,9 +47,7 @@ const Post = ({ date, theme, titre, image, contentPreview, readMore, id, content
                   </Button>
                   <Button inverted
                     color='red'
-                    onClick={() => {
-                    deleteWriting(id)
-                    }}>
+                    onClick={() => {deleteWriting(id)}}>
                     <Icon name='checkmark' /> Confirm Delete
                   </Button>
                 </Modal.Actions>

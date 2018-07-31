@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import './Write.css'
 import Post from '../components/Post.js'
+import ModalNewWrite from '../components/ModalNewWrite.js'
+import { Button, Header, Icon, Image, Modal, Form } from 'semantic-ui-react'
+import Select from 'react-select'
+
 
 class Write extends Component {
     state = {
@@ -8,27 +12,34 @@ class Write extends Component {
         content: [],
         idContent: '',
         idDelete: '',
-        deleteRaw: []
-    }
+        deleteRaw: [],
+        themes: []
+    }    
 
   componentDidMount() {
-    fetch('http://localhost:3333/writings')
+    fetch('http://localhost:4444/themes')
       .then(res => res.json())
-      .then(res => this.setState({posts : res}))
-    }
+      .then(res => this.setState({themes: res}))
+  }
 
+    handleChange = (selectedOption) => {
+      this.setState({ selectedOption })
+      console.log(`Option selected:`, selectedOption)
+    }
+    
   readMore = (id) => {
     const content = this.state.posts.find(elem => elem.id_writings === id).content
     this.setState({content: content})
     this.setState({idContent: id})
+
   }
 
-  deleteBtn =(id) => {
+  deleteBtn = (id) => {
     this.setState({idDelete: id})
   }
 
   deleteWriting = (id) => {
-    fetch(`http://localhost:3333/writings/delete/id=${id}`, {
+    fetch(`http://localhost:4444/writings/delete/id=${id}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -45,15 +56,18 @@ class Write extends Component {
   }
 
 
-
   render() {
-      const post = this.state.posts.map(w =>
+
+
+    const themeSelect = this.state.themes.map(theme => theme.nom_theme)
+
+    const post = this.state.posts.map(w =>
        <Post
         key={w.id_writings}
         date={w.creation_date}
-        theme={w.id_theme}
-        titre={w.titre}
-        image={w.image_url}
+        theme={w.nom_theme}
+        titre={w.title}
+        image={w.media_url}
         contentPreview={w.content.split(' ').slice(0, 26).join(' ') + '...'}
         readMore={this.readMore}
         id={w.id_writings}
@@ -62,11 +76,46 @@ class Write extends Component {
         deleteBtn={this.state.idDelete}
         deleteWriting={this.deleteWriting}
          />)
+         
+       return (
+            <div className='WritContainer'>
 
-          return (
-      <div className='WriteContainer'>
+ <Modal trigger={<Button> + new write</Button>}>
+
+<Modal.Header>Ajouter un post</Modal.Header>
+
+    <Modal.Content image>
+      <Image wrapped size='medium' src='/images/wireframe/image.png' />
+      <Modal.Description>
+        <Header>Écris quelque chose</Header>
+        <p>Choisis un thème, un titre et raconte ton histoire !</p>
+        <Form>
+    <Form.Field>
+      <label>Titre : </label>
+      <input placeholder='Exemple : Le sexisme chez les escargots' />
+    </Form.Field>
+    <Form.Field label='Thème :' control='select'>
+      <option value={themeSelect[0]}>{themeSelect[0]}</option>
+      <option value={themeSelect[1]}>{themeSelect[1]}</option>
+      <option value={themeSelect[2]}>{themeSelect[2]}</option>
+      <option value={themeSelect[3]}>{themeSelect[3]}</option>
+      <option value={themeSelect[4]}>{themeSelect[4]}</option>
+      <option value={themeSelect[5]}>{themeSelect[5]}</option>
+      <option value={themeSelect[6]}>{themeSelect[6]}</option>
+      </Form.Field>
+    <Button type='submit'>Submit</Button>
+  </Form>
+      </Modal.Description>
+    </Modal.Content>
+    <Modal.Actions>
+      <Button primary>
+        Proceed <Icon name='right chevron' />
+      </Button>
+    </Modal.Actions>
+  </Modal>
+
+            
             {post}
-            {console.log(this.state.deleteRaw)}
             </div>
           )
     }
