@@ -1,16 +1,17 @@
 import React from 'react'
-import './Post.css'
+import './Writing.css'
 import { Button, Modal, Header, Icon } from 'semantic-ui-react'
 import { navigate, Link } from '@reach/router'
+import { store, actions } from '../store.js'
 
-const Post = ({ date, theme, titre, image, contentPreview, readMore, id, content, idContent, deleteBtn, deleteWriting }) => {
+const Writing = ({ date, theme, titre, image, contentPreview, id, content, idContent }) => {
   let fullContent = ''
     if (id === idContent) {
         fullContent = content
     }
     else {
     
-    fullContent = <button onClick={() => readMore(id)}>Read more</button>
+    fullContent = <button onClick={() => actions.readMoreBtn(id)}>Read more</button>
     }
    return (
 <div className="Post">
@@ -47,7 +48,7 @@ const Post = ({ date, theme, titre, image, contentPreview, readMore, id, content
                   <Button inverted
                     color='red'
                     onClick={() => {
-                    deleteWriting(id)
+                    actions.deleteWriting(id)
                     }}>
                     <Icon name='checkmark' /> Confirm Delete
                   </Button>
@@ -59,4 +60,4 @@ const Post = ({ date, theme, titre, image, contentPreview, readMore, id, content
      )
 }
 
-export default Post
+export default Writing
