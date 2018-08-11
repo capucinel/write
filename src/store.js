@@ -7,6 +7,7 @@ const initialState = {
   themes: [],
   titleField: '',
   idTheme: 1,
+  themeField:'Absurdités',
   textField: '',
   flash: '',
   writing: ''
@@ -68,7 +69,9 @@ const reducer = (state, action) => {
   if (action.type === 'THEME_FORM') {
     return {
       ...state,
-      idTheme: action.idTheme
+      idTheme: action.idTheme,
+      themeField: action.themeField
+
     }
   }
 
@@ -82,6 +85,8 @@ const reducer = (state, action) => {
   if (action.type === 'ADD_WRITING') {
    console.log(state.titleField)
    console.log(state.idTheme)
+   console.log(state.themeField)
+
    console.log(state.textField)
 
     action.newWriting.preventDefault()
@@ -111,7 +116,7 @@ export const actions = {
   deleteWriting: writing => store.dispatch({ type: 'DELETE_WRITING', writing }),
   loadThemes: themes => store.dispatch({ type: 'LOAD_THEMES', themes }),
   titleForm: title => store.dispatch({ type: 'TITLE_FORM', title }),
-  themeForm: idTheme => store.dispatch({ type: 'THEME_FORM', idTheme }),
+  themeForm: (idTheme, themeField) => store.dispatch({ type: 'THEME_FORM', idTheme, themeField }),
   textForm: text => store.dispatch({ type: 'TEXT_FORM', text }),
   addWritting: newWriting => store.dispatch({ type: 'ADD_WRITING', newWriting })
 }
