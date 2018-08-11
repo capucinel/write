@@ -2,7 +2,7 @@ import React from 'react'
 import './Writing.css'
 import { Button, Modal, Header, Icon } from 'semantic-ui-react'
 import { navigate, Link } from '@reach/router'
-import { store, actions } from '../store.js'
+import { actions } from '../store.js'
 
 const Writing = ({ date, theme, titre, image, contentPreview, id, content, idContent }) => {
   let fullContent = ''
@@ -35,12 +35,7 @@ const Writing = ({ date, theme, titre, image, contentPreview, id, content, idCon
     <React.Fragment>
 
               <Modal trigger={<Button basic color='red'>Delete</Button>} basic size='small' onClose={() => navigate('/')}>
-                <Header icon='archive' content={`Are you sure you want to delete this writing "${titre}" ?`} />
-                <Modal.Content>
-      <p>
-        Your inbox is getting full, would you like us to enable automatic archiving of old messages?
-      </p>
-    </Modal.Content>
+                <Header icon='archive' content={`Are you sure you want to delete "${titre}" ?`} />
                 <Modal.Actions>
                   <Button basic inverted onClick={() => navigate('/writings/remove')}>
                     <Icon name='remove' /> Cancel

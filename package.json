@@ -13,7 +13,13 @@
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.81.3",
     "stylelint": "^9.3.0",
-    "stylelint-config-recommended": "^2.1.0"
+    "stylelint-config-recommended": "^2.1.0",
+    "ajv-keywords": "^3.2.0",
+    "postcss-html": "^0.31.0",
+    "postcss-markdown": "^0.31.0",
+    "rc-progress": "^2.2.5",
+    "react-router": "^4.2.0",
+    "react-smooth-dnd": "^0.4.9"
   },
   "scripts": {
     "start": "react-scripts start",

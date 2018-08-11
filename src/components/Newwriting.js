@@ -1,22 +1,23 @@
 import React from 'react'
 import './Writing.css'
 import { Button, Modal, Header, Icon, Form, Image } from 'semantic-ui-react'
-import { navigate, Link } from '@reach/router'
-import { store, actions } from '../store.js'
+import { actions } from '../store.js'
+import { Router, navigate, Link } from '@reach/router'
 
-const Newwriting = ({ valueTitle, onChangeTitle, themeSelect, idThemeSelect,  valueText, onChangeText, addWritting }) => {
+
+const Newwriting = ({ valueTitle, onChangeTitle, getThemes,  valueText, onChangeText, onSubmit, open, onClose }) => {
+  const themeSelect = getThemes.map(theme => theme.nom_theme)
+  const idThemeSelect = getThemes.map(theme => theme.id_theme)
   return (
   <React.Fragment>
-
-<Modal trigger={<Button> + new write</Button>}>
-
+<Modal open={open} onClose={onClose}>
 <Modal.Header>Ajouter un post</Modal.Header>
     <Modal.Content image>
       <Image wrapped size='medium' src='/images/wireframe/image.png' />
       <Modal.Description>
         <Header>Écris quelque chose</Header>
         <p>Choisis un thème, un titre et raconte ton histoire !</p>
-        <Form onSubmit={addWritting}>
+        <Form onSubmit={onSubmit}>
     <Form.Field>
       <label>Titre : </label>
       <input
@@ -34,7 +35,7 @@ const Newwriting = ({ valueTitle, onChangeTitle, themeSelect, idThemeSelect,  va
       <option value={idThemeSelect[6]} onChange={e => actions.themeForm(e.target.value)}>{themeSelect[6]}</option>
       </Form.Field>
       <Form.Field label='Texte :' control='textarea' rows='6' onChange={e => actions.textForm(e.target.value)} value={valueText}/>
-      <Button primary>
+      <Button primary onClick = {() => navigate('/')}>
         Proceed <Icon name='right chevron' />
       </Button>
   </Form>
