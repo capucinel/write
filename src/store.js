@@ -7,18 +7,25 @@ const initialState = {
   themes: [],
   titleField: '',
   idTheme: 1,
-  themeField:'Absurdités',
+  themeField:'',
   textField: '',
   flash: '',
-  writing: ''
+  writing: {
+    id_writing: '',
+    creation_date: '',
+    title: '',
+    theme: '',
+    content: ''
+  }
 }
 
 const reducer = (state, action) => {
   if (action.type === 'LOAD_WRITINGS') {
-    return {
+      return {
       ...state,
-      writings: action.writings
-    }
+
+        writings: action.writings
+      }
   }
   
   if (action.type === 'READ_MORE') {
@@ -33,6 +40,7 @@ const reducer = (state, action) => {
     const postToDelete = state.writings.find(elem => elem.id_writings === id)
     const i = state.writings.indexOf(postToDelete)
     state.writings.splice(i, 1)
+    
 
     fetch(`http://localhost:3333/writings/delete/id=${id}`, {
       method: 'POST',
@@ -46,7 +54,6 @@ const reducer = (state, action) => {
      })
 
     return {
-    
       writings: [ ...state.writings ]
     }
   }
@@ -63,32 +70,38 @@ const reducer = (state, action) => {
     return {
       ...state,
       titleField: action.title
+     
     }
   }
 
   if (action.type === 'THEME_FORM') {
+
     return {
       ...state,
-      idTheme: action.idTheme,
-      themeField: action.themeField
-
-    }
+      idTheme: action.idTheme
   }
+}
 
   if (action.type === 'TEXT_FORM') {
+    const themeSelect = state.themes.find(elem => elem.id_theme === parseInt(state.idTheme, 10)).nom_theme
+
+    const idWriting = state.writings[state.writings.length - 1].id_writings + 1
     return {
       ...state,
-      textField: action.text
-    }
+      textField: action.text,
+      writing: [{
+        id_writing: idWriting,
+        creation_date: 'jeudi',
+        title: state.titleField,
+        theme: themeSelect,
+        content: state.textField
+    }]
   }
+}
 
   if (action.type === 'ADD_WRITING') {
-   console.log(state.titleField)
-   console.log(state.idTheme)
-   console.log(state.themeField)
-
-   console.log(state.textField)
-
+    
+    
     action.newWriting.preventDefault()
     fetch('http://localhost:3333/newwrite', {
      method: 'POST',
@@ -101,9 +114,17 @@ const reducer = (state, action) => {
    
    return {
     ...state,
-    ...state
+
+
+    writings: state.writings.concat(state.writing)
+
+
+    
+
     }
-  }
+   }
+  
+  
 
   return state
 }
@@ -116,11 +137,10 @@ export const actions = {
   deleteWriting: writing => store.dispatch({ type: 'DELETE_WRITING', writing }),
   loadThemes: themes => store.dispatch({ type: 'LOAD_THEMES', themes }),
   titleForm: title => store.dispatch({ type: 'TITLE_FORM', title }),
-  themeForm: (idTheme, themeField) => store.dispatch({ type: 'THEME_FORM', idTheme, themeField }),
+  themeForm: idTheme => store.dispatch({ type: 'THEME_FORM', idTheme }),
   textForm: text => store.dispatch({ type: 'TEXT_FORM', text }),
   addWritting: newWriting => store.dispatch({ type: 'ADD_WRITING', newWriting })
 }
-
 
 fetch('http://localhost:3333/themes')
   .then(res => res.json())

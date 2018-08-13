@@ -18,7 +18,7 @@ class Writings extends Component {
   render() {
     console.log(this.props.writings)
     const contentValue = c => {
-      if (c === '' || c === null || c.length < 26) {
+      if (c === '' || c === null || c === undefined || c.length < 26) {
         return
         } else {
         return c.split(' ').slice(0, 26).join(' ')
@@ -26,12 +26,14 @@ class Writings extends Component {
        }
   
       const content = c => {
-      if (c === '' || c === null || c.length < 26) {
+      if (c === '' || c === null || c === undefined || c.length < 26) {
         return
       } else {
         return c.split(' ').slice(26, 12000).join(' ')
         }
       }
+
+
       const writing = this.props.writings.map(w =>
         <Writing
           key={w.id_writings}
@@ -43,6 +45,7 @@ class Writings extends Component {
           content={content(w.content)}
           idContent={this.props.idContent}
           id={w.id_writings}
+          
            />)
            
 
@@ -64,6 +67,10 @@ class Writings extends Component {
           open={this.props.edit}
           onClose={() => navigate(`/`)}
           />
+{console.log(this.props.writing)}
+
+{console.log(this.props.writings)}
+
 
           
           {writing}
