@@ -1,7 +1,7 @@
 import React from 'react'
 import './Writing.css'
 import { Button, Modal, Header, Icon } from 'semantic-ui-react'
-import { navigate, Link } from '@reach/router'
+import { navigate } from '@reach/router'
 import { actions } from '../store.js'
 
 const Writing = ({ date, theme, titre, image, contentPreview, id, content, idContent }) => {

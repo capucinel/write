@@ -2,6 +2,7 @@ import { createStore } from 'redux'
 
 const initialState = {
   writings: [],
+  triDate: [],
   content: [],
   idContent: '',
   themes: [],
@@ -10,20 +11,13 @@ const initialState = {
   themeField:'',
   textField: '',
   flash: '',
-  writing: {
-    id_writing: '',
-    creation_date: '',
-    title: '',
-    theme: '',
-    content: ''
-  }
+  dropdownTheme: ''
 }
 
 const reducer = (state, action) => {
   if (action.type === 'LOAD_WRITINGS') {
       return {
-      ...state,
-
+        ...state,
         writings: action.writings
       }
   }
@@ -42,7 +36,7 @@ const reducer = (state, action) => {
     state.writings.splice(i, 1)
     
 
-    fetch(`http://localhost:3333/writings/delete/id=${id}`, {
+    fetch(`http://localhost:4000/writings/delete/id=${id}`, {
       method: 'POST',
       headers: {
        'Accept': 'application/json',
@@ -59,7 +53,6 @@ const reducer = (state, action) => {
   }
 
   if (action.type === 'LOAD_THEMES') {
-    
     return {
       ...state,
       themes: action.themes
@@ -75,7 +68,6 @@ const reducer = (state, action) => {
   }
 
   if (action.type === 'THEME_FORM') {
-
     return {
       ...state,
       idTheme: action.idTheme
@@ -83,27 +75,18 @@ const reducer = (state, action) => {
 }
 
   if (action.type === 'TEXT_FORM') {
-    const themeSelect = state.themes.find(elem => elem.id_theme === parseInt(state.idTheme, 10)).nom_theme
-
-    const idWriting = state.writings[state.writings.length - 1].id_writings + 1
     return {
       ...state,
-      textField: action.text,
-      writing: [{
-        id_writing: idWriting,
-        creation_date: 'jeudi',
-        title: state.titleField,
-        theme: themeSelect,
-        content: state.textField
-    }]
+      textField: action.text
+      
   }
 }
 
   if (action.type === 'ADD_WRITING') {
-    
-    
+    console.log('cliqué')
+
     action.newWriting.preventDefault()
-    fetch('http://localhost:3333/newwrite', {
+    fetch('http://localhost:4000/newwrite', {
      method: 'POST',
      headers: new Headers({
        'Content-Type': 'application/json'
@@ -111,20 +94,21 @@ const reducer = (state, action) => {
      body: JSON.stringify(state)
    })
    .then(res => res.json())
+    
+    .then(window.location.reload())
    
    return {
     ...state,
-
-
-    writings: state.writings.concat(state.writing)
-
-
-    
-
+    writings: state.writings
     }
    }
   
-  
+    if (action.type === 'THEME_SELECTED') {
+    return {
+      ...state,
+      dropdownTheme: action.theme
+  }
+}
 
   return state
 }
@@ -139,10 +123,12 @@ export const actions = {
   titleForm: title => store.dispatch({ type: 'TITLE_FORM', title }),
   themeForm: idTheme => store.dispatch({ type: 'THEME_FORM', idTheme }),
   textForm: text => store.dispatch({ type: 'TEXT_FORM', text }),
-  addWritting: newWriting => store.dispatch({ type: 'ADD_WRITING', newWriting })
+  addWritting: newWriting => store.dispatch({ type: 'ADD_WRITING', newWriting }),
+  dropdownTheme: theme => store.dispatch({ type: 'THEME_SELECTED', theme })
+
 }
 
-fetch('http://localhost:3333/themes')
+fetch('http://localhost:4000/themes')
   .then(res => res.json())
   .then(themes => actions.loadThemes(themes))
 
